@@ -3,28 +3,38 @@ import Features from '../components/Features';
 
 const Shop = () => {
   return (
-    <>
-      {/* Page banner */}
-      <section className="bg-gradient-to-br from-amber-100 to-amber-50 border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
-          <p className="text-amber-700 font-semibold text-sm uppercase tracking-widest mb-2">
+    <main className="w-full overflow-hidden bg-amber-50">
+
+      {/* ─── Shop Hero ──────────────────────── */}
+      <section className="border-b border-stone-200 bg-gradient-to-br from-amber-100 to-amber-50">
+        <div className="mx-auto w-full max-w-7xl px-4 py-10 text-center sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-amber-700 sm:text-sm sm:tracking-widest">
             Our Collection
           </p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-stone-800 mb-3">
+
+          <h1 className="mb-3 text-3xl font-bold leading-tight text-stone-800 sm:text-4xl md:text-5xl">
             Shop All Products
           </h1>
-          <p className="text-stone-600 max-w-xl mx-auto">
+
+          <p className="mx-auto max-w-xl text-sm leading-7 text-stone-600 sm:text-base sm:leading-relaxed">
             Browse our complete range of premium dry fruits, nuts, seeds, and
             mixes — delivered fresh across Pakistan.
           </p>
         </div>
       </section>
 
-      <div className="py-12">
+      {/* ─── Product Section ────────────────── */}
+      <section className="w-full py-8 sm:py-10 lg:py-12">
         <ProductGrid />
+      </section>
+
+      {/* ─── Features ──────────────────────── */}
+      <section className="w-full pb-8 sm:pb-10 lg:pb-14">
         <Features />
-      </div>
-    </>
+      </section>
+
+    </main>
   );
 };
 

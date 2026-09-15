@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Star } from 'lucide-react';
+import { Plus, Star, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const TAG_STYLES = {
@@ -11,92 +11,263 @@ const TAG_STYLES = {
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
-  const Icon = product.icon;
+  const Icon = product.icon || ShoppingBag;
   const [imgError, setImgError] = useState(false);
 
   const hasDiscount =
-    product.originalPrice && product.originalPrice > product.price;
+    product.originalPrice &&
+    product.originalPrice > product.price;
 
-  // Show icon if no image OR image failed to load
   const showIcon = !product.image || imgError;
 
+  const formattedPrice = product.price?.toLocaleString('en-PK');
+  const formattedOriginalPrice =
+    product.originalPrice?.toLocaleString('en-PK');
+
   return (
-    <div className="group bg-white rounded-3xl p-6 border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center relative">
-      {/* Tag badge */}
+    <div
+      className="
+        group
+        relative
+        flex
+        h-full
+        min-w-0
+        flex-col
+        items-center
+        rounded-2xl
+        border
+        border-stone-100
+        bg-white
+        p-4
+        text-center
+        shadow-sm
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:shadow-xl
+        sm:rounded-3xl
+        sm:p-5
+        lg:p-6
+      "
+    >
+      {/* Tag Badge */}
       {product.tag && (
         <span
-          className={`absolute top-4 left-4 z-10 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${
-            TAG_STYLES[product.tag] || 'bg-stone-100 text-stone-700'
-          }`}
+          className={`
+            absolute
+            left-3
+            top-3
+            z-10
+            max-w-[calc(100%-1.5rem)]
+            rounded-full
+            border
+            px-2
+            py-1
+            text-[9px]
+            font-bold
+            uppercase
+            tracking-wide
+            sm:left-4
+            sm:top-4
+            sm:px-2.5
+            sm:text-[10px]
+            ${
+              TAG_STYLES[product.tag] ||
+              'border-stone-200 bg-stone-100 text-stone-700'
+            }
+          `}
         >
           {product.tag}
         </span>
       )}
 
-      {/* Image or icon */}
-      <div className="w-28 h-28 rounded-full bg-gradient-to-br from-amber-50 to-stone-100 flex items-center justify-center mb-4 overflow-hidden group-hover:scale-105 transition-transform duration-300">
+      {/* Product Image */}
+      <div
+        className="
+          mb-3
+          flex
+          h-24
+          w-24
+          shrink-0
+          items-center
+          justify-center
+          overflow-hidden
+          rounded-full
+          bg-gradient-to-br
+          from-amber-50
+          to-stone-100
+          transition-transform
+          duration-300
+          group-hover:scale-105
+          sm:mb-4
+          sm:h-28
+          sm:w-28
+        "
+      >
         {showIcon ? (
-          <Icon size={48} className="text-stone-600" strokeWidth={1.5} />
+          <Icon
+            size={40}
+            className="text-stone-600 sm:h-12 sm:w-12"
+            strokeWidth={1.5}
+          />
         ) : (
           <img
             src={product.image}
             alt={product.name}
             loading="lazy"
             onError={() => setImgError(true)}
-            className="w-full h-full object-cover"
+            className="
+              h-full
+              w-full
+              object-cover
+            "
           />
         )}
       </div>
 
-      {/* English name */}
-      <h3 className="text-lg font-semibold text-stone-800 mb-0.5 leading-tight">
-        {product.name}
-      </h3>
-
-      {/* Urdu name */}
-      {product.urdu && (
-        <p
-          dir="rtl"
-          className="text-sm text-stone-500 mb-2 font-medium"
-          style={{ fontFamily: "'Noto Nastaliq Urdu', serif" }}
+      {/* Product Information */}
+      <div className="flex w-full min-w-0 flex-1 flex-col items-center">
+        {/* English Name */}
+        <h3
+          className="
+            w-full
+            min-w-0
+            break-words
+            text-base
+            font-semibold
+            leading-snug
+            text-stone-800
+            sm:text-lg
+          "
         >
-          {product.urdu}
-        </p>
-      )}
+          {product.name}
+        </h3>
 
-      {/* Rating + unit */}
-      <div className="flex items-center gap-1 mb-3">
-        <Star size={14} className="fill-amber-400 text-amber-400" />
-        <span className="text-xs text-stone-500 font-medium">
-          {product.rating} · {product.unit}
-        </span>
-      </div>
-
-      {/* Price */}
-      <div className="mb-4">
-        {hasDiscount ? (
-          <div className="flex items-baseline justify-center gap-2">
-            <span className="text-2xl font-bold text-amber-700">
-              Rs {product.price.toLocaleString('en-PK')}
-            </span>
-            <span className="text-sm text-stone-400 line-through">
-              Rs {product.originalPrice.toLocaleString('en-PK')}
-            </span>
-          </div>
-        ) : (
-          <span className="text-2xl font-bold text-stone-800">
-            Rs {product.price.toLocaleString('en-PK')}
-          </span>
+        {/* Urdu Name */}
+        {product.urdu && (
+          <p
+            dir="rtl"
+            className="
+              mt-0.5
+              mb-2
+              w-full
+              break-words
+              text-xs
+              font-medium
+              leading-relaxed
+              text-stone-500
+              sm:text-sm
+            "
+            style={{
+              fontFamily: "'Noto Nastaliq Urdu', serif",
+            }}
+          >
+            {product.urdu}
+          </p>
         )}
-      </div>
 
-      {/* Add to cart */}
-      <button
-        onClick={() => addToCart(product)}
-        className="w-full bg-stone-800 hover:bg-amber-400 hover:text-stone-900 text-amber-50 py-2.5 rounded-full font-semibold flex items-center justify-center gap-2 transition-colors duration-200 text-sm"
-      >
-        <Plus size={16} /> Add to Cart
-      </button>
+        {/* Rating + Unit */}
+        <div
+          className="
+            mb-3
+            flex
+            max-w-full
+            flex-wrap
+            items-center
+            justify-center
+            gap-1
+          "
+        >
+          <Star
+            size={13}
+            className="shrink-0 fill-amber-400 text-amber-400 sm:h-3.5 sm:w-3.5"
+          />
+
+          <span className="break-words text-[11px] font-medium text-stone-500 sm:text-xs">
+            {product.rating} · {product.unit}
+          </span>
+        </div>
+
+        {/* Price */}
+        <div className="mb-4 min-h-[32px] w-full">
+          {hasDiscount ? (
+            <div
+              className="
+                flex
+                flex-wrap
+                items-baseline
+                justify-center
+                gap-x-2
+                gap-y-0.5
+              "
+            >
+              <span
+                className="
+                  text-xl
+                  font-bold
+                  text-amber-700
+                  sm:text-2xl
+                "
+              >
+                Rs {formattedPrice}
+              </span>
+
+              <span
+                className="
+                  text-xs
+                  text-stone-400
+                  line-through
+                  sm:text-sm
+                "
+              >
+                Rs {formattedOriginalPrice}
+              </span>
+            </div>
+          ) : (
+            <span
+              className="
+                text-xl
+                font-bold
+                text-stone-800
+                sm:text-2xl
+              "
+            >
+              Rs {formattedPrice}
+            </span>
+          )}
+        </div>
+
+        {/* Add To Cart */}
+        <button
+          type="button"
+          onClick={() => addToCart(product)}
+          className="
+            mt-auto
+            flex
+            min-h-11
+            w-full
+            items-center
+            justify-center
+            gap-2
+            rounded-full
+            bg-stone-800
+            px-4
+            py-2.5
+            text-sm
+            font-semibold
+            text-amber-50
+            transition-all
+            duration-200
+            hover:bg-amber-400
+            hover:text-stone-900
+            active:scale-[0.98]
+          "
+          aria-label={`Add ${product.name} to cart`}
+        >
+          <Plus size={16} />
+          <span>Add to Cart</span>
+        </button>
+      </div>
     </div>
   );
 };
